@@ -1,7 +1,7 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-20 16:00:39
- * @LastEditTime: 2023-03-20 16:20:43
+ * @LastEditTime: 2023-03-21 19:04:46
  */
 package cmd
 
@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"go-gin-template/common/global"
 
-	"github.com/go-admin-team/go-admin-core/sdk/pkg"
+	"go-gin-template/core/sdk/pkg"
 
 	"os"
 
@@ -18,10 +18,10 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:          "go-admin",
-	Short:        "go-admin",
+	Use:          "go-gin-template",
+	Short:        "go-gin-template",
 	SilenceUsage: true,
-	Long:         `go-admin`,
+	Long:         `go-gin-template`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			tip()
@@ -36,14 +36,14 @@ var rootCmd = &cobra.Command{
 }
 
 func tip() {
-	usageStr := `欢迎使用 ` + pkg.Green(`go-admin `+global.Version) + ` 可以使用 ` + pkg.Red(`-h`) + ` 查看命令`
-	usageStr1 := `也可以参考 https://doc.go-admin.dev/guide/ksks 的相关内容`
+	usageStr := `欢迎使用 ` + pkg.Green(`go-gin-template `+global.Version) + ` 可以使用 ` + pkg.Red(`-h`) + ` 查看命令`
+	usageStr1 := `也可以参考 http://127.0.0.1/swagger 的相关内容`
 	fmt.Printf("%s\n", usageStr)
 	fmt.Printf("%s\n", usageStr1)
 }
 
 func init() {
-
+	rootCmd.AddCommand(StartServerCmd)
 }
 
 // Execute : apply commands
