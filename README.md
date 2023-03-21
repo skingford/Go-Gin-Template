@@ -1,7 +1,7 @@
 <!--
  * @Author: kingford
  * @Date: 2023-03-18 23:30:32
- * @LastEditTime: 2023-03-22 01:12:46
+ * @LastEditTime: 2023-03-22 02:11:09
 -->
 
 # Go-Gin-Templatee
@@ -11,6 +11,6 @@
 ```bash
 CONFIG_NAME=config_dev go run main.go gin --port=8080
 
-go run main.go gin -p 8080 -m debug
+go run main.go gin -w -p 8080 -m debug
 
 ```

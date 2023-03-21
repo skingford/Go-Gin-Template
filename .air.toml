@@ -1,0 +1,16 @@
+root = "."
+tmp_dir = "tmp"
+build_dir = "bin"
+
+[build]
+  binary_name = "app"
+
+[log]
+  level = "debug"
+  output = "stdout"
+
+[monitor]
+  delay = 1000
+  exclude_dir = ["tmp/*", "bin/*"]
+  paths = ["./"]
+  extensions = ["go"]
