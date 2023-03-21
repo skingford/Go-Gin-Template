@@ -1,7 +1,7 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-21 11:57:20
- * @LastEditTime: 2023-03-21 19:27:08
+ * @LastEditTime: 2023-03-22 01:14:59
  */
 package cmd
 
@@ -36,7 +36,7 @@ var (
 		Example:      "go-gin-template server -c config/settings.yml",
 		SilenceUsage: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
-			setup()
+			setupServer()
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return run()
@@ -54,7 +54,7 @@ func init() {
 	AppRouters = append(AppRouters, router.InitRouter)
 }
 
-func setup() {
+func setupServer() {
 	usageStr := `starting api server...`
 	log.Println(usageStr)
 }

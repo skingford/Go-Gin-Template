@@ -1,8 +1,3 @@
-/*
- * @Author: kingford
- * @Date: 2023-03-11 00:57:58
- * @LastEditTime: 2023-03-11 01:06:48
- */
 package pkg
 
 import (
@@ -12,40 +7,50 @@ import (
 	"github.com/spf13/viper"
 )
 
-// export APP_ENV=prod
+type Config struct {
+	Server struct {
+		Port int
+		Mode string
+	}
+	Database struct {
+		Host     string
+		Port     int
+		Username string
+		Password string
+	}
+}
+
 func NewViper() {
-	// 设置配置文件的搜索路径
-	viper.AddConfigPath(".")
-	viper.SetConfigName("config")
+	// 初始化viper对象
+	v := viper.New()
 
-	// 从环境变量中获取当前环境
-	env := os.Getenv("APP_ENV")
-	if env == "" {
-		env = "dev" // 默认为开发环境
-	}
-
-	// 加载共享配置文件
-	err := viper.ReadInConfig()
+	// 获取当前工作目录的绝对路径
+	dir, err := os.Getwd()
 	if err != nil {
-		fmt.Println("Error loading config file:", err)
-		return
+		panic(fmt.Errorf("Failed to get working directory: %v", err))
 	}
 
-	// 读取特定环境的配置文件
-	viper.SetConfigName(fmt.Sprintf("config_%s", env))
-	err = viper.MergeInConfig()
-	if err != nil {
-		fmt.Println("Error loading config file:", err)
-		return
+	// 设置viper配置
+	v.SetConfigName("config")
+	v.SetConfigType("yaml")
+	v.AddConfigPath(dir + "/config")
+	v.AutomaticEnv()
+
+	// 打印当前工作目录的绝对路径
+	fmt.Printf("Current working directory: %s\n", dir+"/config")
+
+	// 读取配置文件
+	if err := v.ReadInConfig(); err != nil {
+		panic(fmt.Errorf("Failed to read config: %v", err))
 	}
 
-	// 获取配置选项
-	port := viper.GetInt("http.port")
-	dbHost := viper.GetString("db.host")
-	dbPort := viper.GetInt("db.port")
+	// 映射配置到结构体
+	var config Config
+	if err := v.Unmarshal(&config); err != nil {
+		panic(fmt.Errorf("Failed to unmarshal config: %v", err))
+	}
 
-	// 输出配置选项
-	fmt.Printf("HTTP port: %d\n", port)
-	fmt.Printf("DB host: %s\n", dbHost)
-	fmt.Printf("DB port: %d\n", dbPort)
+	// 打印配置
+	fmt.Printf("Server config: %+v\n", config.Server)
+	fmt.Printf("Database config: %+v\n", config.Database)
 }
