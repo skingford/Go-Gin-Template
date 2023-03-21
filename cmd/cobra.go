@@ -1,7 +1,7 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-20 16:00:39
- * @LastEditTime: 2023-03-21 19:04:46
+ * @LastEditTime: 2023-03-21 23:28:08
  */
 package cmd
 
@@ -43,12 +43,14 @@ func tip() {
 }
 
 func init() {
-	rootCmd.AddCommand(StartServerCmd)
+	rootCmd.AddCommand(ginCmd)
+	// rootCmd.AddCommand(StartServerCmd)
 }
 
 // Execute : apply commands
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
 		os.Exit(-1)
 	}
 }
