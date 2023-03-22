@@ -1,13 +1,14 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-20 16:00:39
- * @LastEditTime: 2023-03-21 23:28:08
+ * @LastEditTime: 2023-03-22 23:28:53
  */
 package cmd
 
 import (
 	"errors"
 	"fmt"
+	"go-gin-template/cmd/server"
 	"go-gin-template/common/global"
 
 	"go-gin-template/core/sdk/pkg"
@@ -43,7 +44,7 @@ func tip() {
 }
 
 func init() {
-	rootCmd.AddCommand(ginCmd)
+	rootCmd.AddCommand(server.GinCmd)
 	// rootCmd.AddCommand(StartServerCmd)
 }
 

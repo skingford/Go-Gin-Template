@@ -1,7 +1,7 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-21 23:27:30
- * @LastEditTime: 2023-03-22 18:04:39
+ * @LastEditTime: 2023-03-22 23:29:16
  */
 package server
 
@@ -27,7 +27,7 @@ import (
 
 var (
 	AppRouters = make([]func(), 0)
-	ginCmd     = &cobra.Command{
+	GinCmd     = &cobra.Command{
 		Use:   "gin",
 		Short: "Start a Gin HTTP server",
 		PreRun: func(cmd *cobra.Command, args []string) {
@@ -102,12 +102,11 @@ func run(port int, mode string) error {
 	// // 启动HTTP服务器
 	// r.Run(fmt.Sprintf(":%d", port))
 
-	return nil
 }
 
 func init() {
-	ginCmd.Flags().IntP("port", "p", 8080, "HTTP server port number")
-	ginCmd.Flags().StringP("mode", "m", gin.DebugMode, "Gin mode (debug, release, test)")
+	GinCmd.Flags().IntP("port", "p", 8080, "HTTP server port number")
+	GinCmd.Flags().StringP("mode", "m", gin.DebugMode, "Gin mode (debug, release, test)")
 
 	AppRouters = append(AppRouters, router.InitRouter)
 }

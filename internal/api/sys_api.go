@@ -1,3 +1,8 @@
+/*
+ * @Author: kingford
+ * @Date: 2023-03-21 23:24:35
+ * @LastEditTime: 2023-03-22 23:31:29
+ */
 package api
 
 import (
@@ -12,14 +17,14 @@ type SysApi struct {
 func (e *SysApi) Find(c *gin.Context) {
 
 	c.JSON(200, gin.H{
-		"message": "Hello, world!",
+		"message": "Find Hello, world!",
 	})
 }
 
 func (e *SysApi) First(c *gin.Context) {
 
 	c.JSON(200, gin.H{
-		"message": "Hello, world!",
+		"message": "First Hello, world!",
 	})
 }
 
