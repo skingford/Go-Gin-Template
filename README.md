@@ -1,7 +1,7 @@
 <!--
  * @Author: kingford
  * @Date: 2023-03-18 23:30:32
- * @LastEditTime: 2023-03-22 10:15:06
+ * @LastEditTime: 2023-03-22 23:34:40
 -->
 
 # Go-Gin-Templatee
@@ -14,3 +14,7 @@ CONFIG_NAME=config_dev go run main.go gin --port=8080
 go run main.go gin -p 8080 -m debug
 
 ```
+
+## 技术文档
+
+[https://gorm.io/docs/](https://gorm.io/docs/)
