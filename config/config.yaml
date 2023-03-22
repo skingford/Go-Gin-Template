@@ -6,3 +6,8 @@ database:
   port: 3306
   username: root
   password: password
+ssl:
+  keyStr: keyStr
+  pem: pem
+  enable: false
+  domain1: localhost

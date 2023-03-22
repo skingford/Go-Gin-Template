@@ -1,9 +1,9 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-21 15:35:00
- * @LastEditTime: 2023-03-21 19:24:54
+ * @LastEditTime: 2023-03-22 17:02:43
  */
-package router
+package system
 
 import (
 	"go-gin-template/internal/api"

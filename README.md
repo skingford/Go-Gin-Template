@@ -1,7 +1,7 @@
 <!--
  * @Author: kingford
  * @Date: 2023-03-18 23:30:32
- * @LastEditTime: 2023-03-22 01:12:46
+ * @LastEditTime: 2023-03-22 10:15:06
 -->
 
 # Go-Gin-Templatee

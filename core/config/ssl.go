@@ -1,7 +1,7 @@
 /*
  * @Author: kingford
- * @Date: 2023-03-21 17:56:15
- * @LastEditTime: 2023-03-21 17:56:18
+ * @Date: 2023-03-22 17:32:39
+ * @LastEditTime: 2023-03-22 17:50:02
  */
 package config
 
@@ -11,5 +11,3 @@ type Ssl struct {
 	Enable bool
 	Domain string
 }
-
-var SslConfig = new(Ssl)

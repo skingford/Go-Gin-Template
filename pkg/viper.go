@@ -1,24 +1,17 @@
+/*
+ * @Author: kingford
+ * @Date: 2023-03-22 09:44:10
+ * @LastEditTime: 2023-03-22 17:59:13
+ */
 package pkg
 
 import (
 	"fmt"
+	"go-gin-template/core/config"
 	"os"
 
 	"github.com/spf13/viper"
 )
-
-type Config struct {
-	Server struct {
-		Port int
-		Mode string
-	}
-	Database struct {
-		Host     string
-		Port     int
-		Username string
-		Password string
-	}
-}
 
 func NewViper() {
 	// 初始化viper对象
@@ -27,7 +20,7 @@ func NewViper() {
 	// 获取当前工作目录的绝对路径
 	dir, err := os.Getwd()
 	if err != nil {
-		panic(fmt.Errorf("Failed to get working directory: %v", err))
+		panic(fmt.Errorf("failed to get working directory: %v", err))
 	}
 
 	// 设置viper配置
@@ -41,16 +34,16 @@ func NewViper() {
 
 	// 读取配置文件
 	if err := v.ReadInConfig(); err != nil {
-		panic(fmt.Errorf("Failed to read config: %v", err))
+		panic(fmt.Errorf("failed to read config: %v", err))
 	}
 
 	// 映射配置到结构体
-	var config Config
-	if err := v.Unmarshal(&config); err != nil {
-		panic(fmt.Errorf("Failed to unmarshal config: %v", err))
+
+	if err := v.Unmarshal(&config.ApplicationConfig); err != nil {
+		panic(fmt.Errorf("failed to unmarshal config: %v", err))
 	}
 
 	// 打印配置
-	fmt.Printf("Server config: %+v\n", config.Server)
-	fmt.Printf("Database config: %+v\n", config.Database)
+	fmt.Printf("Server config: %+v\n", config.ApplicationConfig.Server)
+	fmt.Printf("Database config: %+v\n", config.ApplicationConfig.Database)
 }
