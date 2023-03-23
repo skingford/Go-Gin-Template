@@ -1,14 +1,14 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-21 14:46:31
- * @LastEditTime: 2023-03-21 17:57:57
+ * @LastEditTime: 2023-03-23 09:58:09
  */
 package middleware
 
 import (
 	"net/http"
 
-	"go-gin-template/core/config"
+	"go-gin-template/common/config"
 
 	"github.com/gin-gonic/gin"
 )

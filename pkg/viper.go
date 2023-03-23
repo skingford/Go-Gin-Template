@@ -1,13 +1,13 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-22 09:44:10
- * @LastEditTime: 2023-03-22 17:59:13
+ * @LastEditTime: 2023-03-23 10:01:07
  */
 package pkg
 
 import (
 	"fmt"
-	"go-gin-template/core/config"
+	"go-gin-template/common/config"
 	"os"
 
 	"github.com/spf13/viper"

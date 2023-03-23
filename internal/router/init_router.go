@@ -1,7 +1,7 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-21 11:55:53
- * @LastEditTime: 2023-03-22 17:07:31
+ * @LastEditTime: 2023-03-23 10:04:33
  */
 package router
 
@@ -10,7 +10,7 @@ import (
 	"log"
 	"os"
 
-	"go-gin-template/core/sdk"
+	"go-gin-template/common"
 	"go-gin-template/internal/router/system"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +19,7 @@ import (
 // InitRouter 路由初始化
 func InitRouter() {
 	var r *gin.Engine
-	h := sdk.Runtime.GetEngine()
+	h := common.Runtime.GetEngine()
 	if h == nil {
 		log.Fatal("not found engine...")
 		os.Exit(-1)

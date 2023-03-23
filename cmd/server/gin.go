@@ -1,15 +1,15 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-21 23:27:30
- * @LastEditTime: 2023-03-22 23:29:16
+ * @LastEditTime: 2023-03-23 10:06:48
  */
 package server
 
 import (
 	"context"
 	"fmt"
+	"go-gin-template/common"
 	"go-gin-template/common/global"
-	"go-gin-template/core/sdk"
 	"go-gin-template/internal/middleware"
 	"go-gin-template/internal/router"
 	"go-gin-template/pkg"
@@ -19,7 +19,7 @@ import (
 	"os/signal"
 	"time"
 
-	"go-gin-template/core/config"
+	"go-gin-template/common/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
@@ -55,7 +55,7 @@ func run(port int, mode string) error {
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", "0.0.0.0", port),
-		Handler: sdk.Runtime.GetEngine(),
+		Handler: common.Runtime.GetEngine(),
 	}
 
 	go func() {
@@ -118,10 +118,10 @@ func tip() {
 
 func initRouter() {
 	var r *gin.Engine
-	h := sdk.Runtime.GetEngine()
+	h := common.Runtime.GetEngine()
 	if h == nil {
 		h = gin.New()
-		sdk.Runtime.SetEngine(h)
+		common.Runtime.SetEngine(h)
 	}
 	switch h.(type) {
 	case *gin.Engine:
