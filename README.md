@@ -1,7 +1,7 @@
 <!--
  * @Author: kingford
  * @Date: 2023-03-18 23:30:32
- * @LastEditTime: 2023-03-23 10:23:40
+ * @LastEditTime: 2023-03-23 17:01:40
 -->
 
 # Go-Gin-Templatee
@@ -31,3 +31,4 @@ go test -bench .
 ## 参考
 
 [https://github.com/xinliangnote/go-gin-api](https://github.com/xinliangnote/go-gin-api)
+[https://github.com/google/wire](https://github.com/google/wire)

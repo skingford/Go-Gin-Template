@@ -1,0 +1,2 @@
+{"level":"info","time":"2023-03-23 20:37:29","caller":"crypto/func_sign.go:11","msg":"sign method logger","domain":"go-gin-api[fat]"}
+{"level":"info","time":"2023-03-23 20:37:38","caller":"crypto/func_md5.go:11","msg":"md5 method logger","domain":"go-gin-api[fat]"}

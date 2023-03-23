@@ -1,72 +1,80 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-21 23:27:30
- * @LastEditTime: 2023-03-23 10:38:31
+ * @LastEditTime: 2023-03-23 20:34:36
  */
 package server
 
 import (
 	"context"
 	"fmt"
-	"go-gin-template/common"
+	"go-gin-template/common/config"
 	"go-gin-template/common/global"
-	"go-gin-template/internal/middleware"
 	"go-gin-template/internal/router"
 	"go-gin-template/pkg"
+	"go-gin-template/pkg/env"
+	"go-gin-template/pkg/logger"
+	"go-gin-template/pkg/shutdown"
+	"go-gin-template/pkg/timeutil"
 	"log"
 	"net/http"
-	"os"
-	"os/signal"
 	"time"
-
-	"go-gin-template/common/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 var (
-	AppRouters = make([]func(), 0)
-	GinCmd     = &cobra.Command{
+	GinCmd = &cobra.Command{
 		Use:   "gin",
 		Short: "Start a Gin HTTP server",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			setup()
 		},
-		RunE: func(cmd *cobra.Command, args []string) error {
+		Run: func(cmd *cobra.Command, args []string) {
 			port, _ := cmd.Flags().GetInt("port")
 			mode, _ := cmd.Flags().GetString("mode")
-			return run(port, mode)
+			run(port, mode)
 		},
 	}
 )
+
+func init() {
+	GinCmd.Flags().IntP("port", "p", 8080, "HTTP server port number")
+	GinCmd.Flags().StringP("mode", "m", gin.DebugMode, "Gin mode (debug, release, test)")
+
+}
 
 func setup() {
 	pkg.NewViper()
 }
 
-func run(port int, mode string) error {
+func run(port int, mode string) {
+	if config.ApplicationConfig.Server.Mode == config.ModeProd.String() {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
-	initRouter()
+	s, err := HttpServer()
 
-	for _, f := range AppRouters {
-		f()
+	if err != nil {
+		panic(err)
 	}
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", "0.0.0.0", port),
-		Handler: common.Runtime.GetEngine(),
+		Handler: s.Mux,
 	}
 
 	go func() {
 		// 服务连接
 		if config.ApplicationConfig.Ssl.Enable {
 			if err := srv.ListenAndServeTLS(config.ApplicationConfig.Ssl.Pem, config.ApplicationConfig.Ssl.KeyStr); err != nil && err != http.ErrServerClosed {
-				log.Fatal("listen: ", err)
+				s.Logger.Error("http server startup err", zap.Error(err))
 			}
 		} else {
 			if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-				log.Fatal("listen: ", err)
+				s.Logger.Error("http server startup err", zap.Error(err))
 			}
 		}
 	}()
@@ -80,35 +88,21 @@ func run(port int, mode string) error {
 	fmt.Printf("-  Local:   http://localhost:%d/swagger/admin/index.html \r\n", port)
 	fmt.Printf("-  Network: http://%s:%d/swagger/admin/index.html \r\n", pkg.GetLocaHonst(), port)
 	fmt.Printf("%s Enter Control + C Shutdown Server \r\n", pkg.GetCurrentTimeStr())
-	// 等待中断信号以优雅地关闭服务器（设置 5 秒的超时时间）
-	quit := make(chan os.Signal)
-	signal.Notify(quit, os.Interrupt)
-	<-quit
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	fmt.Printf("%s Shutdown Server ... \r\n", pkg.GetCurrentTimeStr())
+	// 优雅关闭
+	shutdown.NewHook().Close(
+		// 关闭 http server
+		func() {
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+			defer cancel()
+			fmt.Printf("%s Shutdown Server ... \r\n", pkg.GetCurrentTimeStr())
 
-	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatal("Server Shutdown:", err)
-	}
-	log.Println("Server exiting")
+			if err := srv.Shutdown(ctx); err != nil {
+				log.Fatal("server shutdown err", zap.Error(err))
+			}
+		},
+	)
 
-	return nil
-
-	// 设置Gin的模式
-	// gin.SetMode(mode)
-
-	// // 启动HTTP服务器
-	// r.Run(fmt.Sprintf(":%d", port))
-
-}
-
-func init() {
-	GinCmd.Flags().IntP("port", "p", 8080, "HTTP server port number")
-	GinCmd.Flags().StringP("mode", "m", gin.DebugMode, "Gin mode (debug, release, test)")
-
-	AppRouters = append(AppRouters, router.InitRouter)
 }
 
 func tip() {
@@ -116,21 +110,22 @@ func tip() {
 	fmt.Printf("%s \n\n", usageStr)
 }
 
-func initRouter() {
-	var r *gin.Engine
-	h := common.Runtime.GetEngine()
-	if h == nil {
-		h = gin.New()
-		common.Runtime.SetEngine(h)
-	}
-	switch h.(type) {
-	case *gin.Engine:
-		r = h.(*gin.Engine)
-	default:
-		log.Fatal("not support other engine")
-		os.Exit(-1)
+func HttpServer() (*router.Server, error) {
+	// 初始化 access logger
+	accessLogger, err := logger.NewJSONLogger(
+		logger.WithDisableConsole(),
+		logger.WithField("domain", fmt.Sprintf("%s[%s]", config.ProjectName, env.Active().Value())),
+		logger.WithTimeLayout(timeutil.CSTLayout),
+		logger.WithFileP(config.ProjectAccessLogFile),
+	)
+	if err != nil {
+		panic(err)
 	}
 
-	r.Use(middleware.Sentinel())
+	defer func() {
+		_ = accessLogger.Sync()
 
+	}()
+
+	return router.NewHTTPServer(accessLogger)
 }
