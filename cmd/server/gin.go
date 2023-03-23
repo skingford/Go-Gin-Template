@@ -1,7 +1,7 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-21 23:27:30
- * @LastEditTime: 2023-03-23 10:06:48
+ * @LastEditTime: 2023-03-23 10:38:31
  */
 package server
 
@@ -132,11 +132,5 @@ func initRouter() {
 	}
 
 	r.Use(middleware.Sentinel())
-
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello, world!",
-		})
-	})
 
 }

@@ -1,7 +1,7 @@
 <!--
  * @Author: kingford
  * @Date: 2023-03-18 23:30:32
- * @LastEditTime: 2023-03-23 09:42:40
+ * @LastEditTime: 2023-03-23 10:23:40
 -->
 
 # Go-Gin-Templatee
@@ -18,6 +18,15 @@ go run main.go gin -p 8080 -m debug
 ## 技术文档
 
 [https://gorm.io/docs/](https://gorm.io/docs/)
+
+## test
+
+in package
+
+```bash
+go test -v
+go test -bench .
+```
 
 ## 参考
 

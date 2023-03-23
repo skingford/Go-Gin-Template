@@ -1,7 +1,7 @@
 /*
  * @Author: kingford
  * @Date: 2023-03-20 16:00:39
- * @LastEditTime: 2023-03-22 23:28:53
+ * @LastEditTime: 2023-03-23 10:15:38
  */
 package cmd
 
@@ -11,7 +11,7 @@ import (
 	"go-gin-template/cmd/server"
 	"go-gin-template/common/global"
 
-	"go-gin-template/core/sdk/pkg"
+	"go-gin-template/pkg"
 
 	"os"
 
